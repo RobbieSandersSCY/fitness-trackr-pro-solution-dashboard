@@ -30,9 +30,11 @@ header nav {
 
 a {
   color: teal;
+  text-decoration: none;
 }
 
-a:hover {
+a:hover,
+a.active {
   cursor: pointer;
   text-decoration: underline;
 }
