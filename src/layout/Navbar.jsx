@@ -9,6 +9,7 @@ export default function Navbar() {
       <p>Fitness Trackr</p>
       <nav>
         <NavLink to="/activities">Activities</NavLink>
+        <NavLink to="/routines">Routines</NavLink>
         {/* This remains <a> because it's not a real link! */}
         {token ? (
           <a onClick={() => logout()}>Log out</a>
