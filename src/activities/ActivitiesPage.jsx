@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getActivities } from "../api/activities";
 
-import ActivityList from "./ActivityList";
 import ActivityForm from "./ActivityForm";
+import ActivityList from "./ActivityList";
 
 export default function ActivitiesPage() {
   const [activities, setActivities] = useState([]);
