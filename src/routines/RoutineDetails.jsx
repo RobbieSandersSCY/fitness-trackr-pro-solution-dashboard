@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router";
 import { deleteRoutine, getRoutine } from "../api/routines";
 import { useAuth } from "../auth/AuthContext";
 
+import SetForm from "./sets/SetForm";
+import SetList from "./sets/SetList";
+
 export default function RoutineDetails() {
   const { token } = useAuth();
   const { id } = useParams();
@@ -37,6 +40,9 @@ export default function RoutineDetails() {
       <p>{routine.goal}</p>
       {token && <button onClick={tryDelete}>Delete</button>}
       {error && <p role="alert">{error}</p>}
+
+      <SetList sets={routine.sets} syncRoutine={syncRoutine} />
+      {token && <SetForm routineId={id} syncRoutine={syncRoutine} />}
     </>
   );
 }
