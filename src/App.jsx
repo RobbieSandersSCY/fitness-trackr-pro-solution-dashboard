@@ -6,6 +6,7 @@ import Login from "./auth/Login";
 import ActivitiesPage from "./activities/ActivitiesPage";
 import ActivityDetails from "./activities/ActivityDetails";
 import RoutinesPage from "./routines/RoutinesPage";
+import RoutineDetails from "./routines/RoutineDetails";
 import Error404 from "./Error404.jsx";
 
 /**
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/activities" element={<ActivitiesPage />} />
         <Route path="/activities/:id" element={<ActivityDetails />} />
         <Route path="/routines" element={<RoutinesPage />} />
+        <Route path="/routines/:id" element={<RoutineDetails />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Error404 />} />
