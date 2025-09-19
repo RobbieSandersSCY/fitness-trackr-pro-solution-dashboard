@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { getActivities } from "../api/activities";
+import { useAuth } from "../auth/AuthContext";
 
 import ActivityForm from "./ActivityForm";
 import ActivityList from "./ActivityList";
 
 export default function ActivitiesPage() {
+  const { token } = useAuth();
+
   const [activities, setActivities] = useState([]);
 
   const syncActivities = async () => {
@@ -20,7 +23,7 @@ export default function ActivitiesPage() {
     <>
       <h1>Activities</h1>
       <ActivityList activities={activities} />
-      <ActivityForm syncActivities={syncActivities} />
+      {token && <ActivityForm syncActivities={syncActivities} />}
     </>
   );
 }
