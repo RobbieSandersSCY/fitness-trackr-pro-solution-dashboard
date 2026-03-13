@@ -13,6 +13,7 @@ import {
 } from "../api/routines";
 import ActivityForm from "../activities/ActivityForm";
 import RoutineForm from "../routines/RoutineForm";
+import "./DashboardPage.css";
 
 export default function DashboardPage() {
   const { token } = useAuth();
@@ -39,7 +40,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <>
+    <div className="dashboard-page">
       <h1>Dashboard</h1>
 
       <section>
@@ -59,7 +60,7 @@ export default function DashboardPage() {
           syncRoutines={syncRoutines}
         />
       </section>
-    </>
+    </div>
   );
 }
 
@@ -71,28 +72,37 @@ function ActivityDashboardList({ activities, syncActivities }) {
   if (activities.length === 0) return <p>No activities yet.</p>;
 
   return (
-    <ul>
-      {activities.map((activity) =>
-        editingId === activity.id ? (
-          <ActivityEditForm
-            key={activity.id}
-            activity={activity}
-            onSave={() => {
-              setEditingId(null);
-              syncActivities();
-            }}
-            onCancel={() => setEditingId(null)}
-          />
-        ) : (
-          <ActivityDashboardItem
-            key={activity.id}
-            activity={activity}
-            onEdit={() => setEditingId(activity.id)}
-            syncActivities={syncActivities}
-          />
-        ),
-      )}
-    </ul>
+    <table className="dashboard-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {activities.map((activity) =>
+          editingId === activity.id ? (
+            <ActivityEditForm
+              key={activity.id}
+              activity={activity}
+              onSave={() => {
+                setEditingId(null);
+                syncActivities();
+              }}
+              onCancel={() => setEditingId(null)}
+            />
+          ) : (
+            <ActivityDashboardItem
+              key={activity.id}
+              activity={activity}
+              onEdit={() => setEditingId(activity.id)}
+              syncActivities={syncActivities}
+            />
+          ),
+        )}
+      </tbody>
+    </table>
   );
 }
 
@@ -111,14 +121,21 @@ function ActivityDashboardItem({ activity, onEdit, syncActivities }) {
   };
 
   return (
-    <li>
-      <p>
-        <strong>{activity.name}</strong> — {activity.description}
-      </p>
-      <button onClick={onEdit}>Edit</button>
-      <button onClick={tryDelete}>Delete</button>
-      {error && <p role="alert">{error}</p>}
-    </li>
+    <tr>
+      <td>
+        <strong>{activity.name}</strong>
+      </td>
+      <td>{activity.description}</td>
+      <td className="actions">
+        <button className="btn-edit" onClick={onEdit}>
+          Edit
+        </button>
+        <button className="btn-delete" onClick={tryDelete}>
+          Delete
+        </button>
+        {error && <p role="alert">{error}</p>}
+      </td>
+    </tr>
   );
 }
 
@@ -139,31 +156,38 @@ function ActivityEditForm({ activity, onSave, onCancel }) {
   };
 
   return (
-    <li>
-      <form action={trySave}>
-        <label>
-          Name{" "}
+    <tr className="edit-row">
+      <td>
+        <form id="activity-edit" action={trySave}>
           <input
             type="text"
             name="name"
             defaultValue={activity.name}
           />
-        </label>
-        <label>
-          Description{" "}
-          <input
-            type="text"
-            name="description"
-            defaultValue={activity.description}
-          />
-        </label>
-        <button>Save</button>
-        <button type="button" onClick={onCancel}>
+        </form>
+      </td>
+      <td>
+        <input
+          type="text"
+          name="description"
+          form="activity-edit"
+          defaultValue={activity.description}
+        />
+      </td>
+      <td>
+        <button form="activity-edit" className="btn-save">
+          Save
+        </button>
+        <button
+          form="activity-edit"
+          className="btn-cancel"
+          type="button"
+          onClick={onCancel}>
           Cancel
         </button>
-      </form>
-      {error && <p role="alert">{error}</p>}
-    </li>
+        {error && <p role="alert">{error}</p>}
+      </td>
+    </tr>
   );
 }
 
@@ -175,28 +199,37 @@ function RoutineDashboardList({ routines, syncRoutines }) {
   if (routines.length === 0) return <p>No routines yet.</p>;
 
   return (
-    <ul>
-      {routines.map((routine) =>
-        editingId === routine.id ? (
-          <RoutineEditForm
-            key={routine.id}
-            routine={routine}
-            onSave={() => {
-              setEditingId(null);
-              syncRoutines();
-            }}
-            onCancel={() => setEditingId(null)}
-          />
-        ) : (
-          <RoutineDashboardItem
-            key={routine.id}
-            routine={routine}
-            onEdit={() => setEditingId(routine.id)}
-            syncRoutines={syncRoutines}
-          />
-        ),
-      )}
-    </ul>
+    <table className="dashboard-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Goal</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {routines.map((routine) =>
+          editingId === routine.id ? (
+            <RoutineEditForm
+              key={routine.id}
+              routine={routine}
+              onSave={() => {
+                setEditingId(null);
+                syncRoutines();
+              }}
+              onCancel={() => setEditingId(null)}
+            />
+          ) : (
+            <RoutineDashboardItem
+              key={routine.id}
+              routine={routine}
+              onEdit={() => setEditingId(routine.id)}
+              syncRoutines={syncRoutines}
+            />
+          ),
+        )}
+      </tbody>
+    </table>
   );
 }
 
@@ -215,15 +248,22 @@ function RoutineDashboardItem({ routine, onEdit, syncRoutines }) {
   };
 
   return (
-    <li>
-      <p>
-        <strong>{routine.name}</strong> — {routine.goal}
-      </p>
-      <Link to={"/routines/" + routine.id}>Sets →</Link>
-      <button onClick={onEdit}>Edit</button>
-      <button onClick={tryDelete}>Delete</button>
-      {error && <p role="alert">{error}</p>}
-    </li>
+    <tr>
+      <td>
+        <strong>{routine.name}</strong>
+      </td>
+      <td>{routine.goal}</td>
+      <td>
+        <Link to={"/routines/" + routine.id}>Sets →</Link>
+        <button className="btn-edit" onClick={onEdit}>
+          Edit
+        </button>
+        <button className="btn-delete" onClick={tryDelete}>
+          Delete
+        </button>
+        {error && <p role="alert">{error}</p>}
+      </td>
+    </tr>
   );
 }
 
@@ -266,30 +306,37 @@ function RoutineEditForm({ routine, onSave, onCancel }) {
   };
 
   return (
-    <li>
-      <form action={trySave}>
-        <label>
-          Name{" "}
+    <tr className="edit-row">
+      <td>
+        <form id="routine-edit" action={trySave}>
           <input
             type="text"
             name="name"
             defaultValue={routine.name}
           />
-        </label>
-        <label>
-          Goal{" "}
-          <input
-            type="text"
-            name="goal"
-            defaultValue={routine.goal}
-          />
-        </label>
-        <button>Save</button>
-        <button type="button" onClick={onCancel}>
+        </form>
+      </td>
+      <td>
+        <input
+          form="routine-edit"
+          type="text"
+          name="goal"
+          defaultValue={routine.goal}
+        />
+      </td>
+      <td>
+        <button className="btn-save" form="routine-edit">
+          Save
+        </button>
+        <button
+          className="btn-cancel"
+          form="routine-edit"
+          type="button"
+          onClick={onCancel}>
           Cancel
         </button>
-      </form>
-      {error && <p role="alert">{error}</p>}
-    </li>
+        {error && <p role="alert">{error}</p>}
+      </td>
+    </tr>
   );
 }

@@ -1,5 +1,11 @@
 const API = import.meta.env.VITE_API;
 
+/**
+ * @typedef {object} Activity
+ * @property {string} [name]
+ * @property {string} [description]
+ */
+
 /** Fetches an array of activities from the API. */
 export async function getActivities() {
   try {
@@ -27,6 +33,10 @@ export async function getActivity(id) {
 /**
  * Sends a new activity to the API to be created.
  * A valid token is required.
+ * @param {string} token
+ * @param {Activity} activity
+ * @throws {Error} if token is missing
+ * @throws {Error} if the API response is not ok
  */
 export async function createActivity(token, activity) {
   if (!token) {
@@ -48,6 +58,14 @@ export async function createActivity(token, activity) {
   }
 }
 
+/**
+ * Updates an existing activity by ID. Requires a valid token.
+ * @param {string} token
+ * @param {number} id
+ * @param {Activity} activity
+ * @throws {Error} if token is missing
+ * @throws {Error} if the API response is not ok
+ */
 export async function updateActivity(token, id, activity) {
   if (!token) {
     throw Error("You must be signed in to update an activity.");
@@ -71,6 +89,10 @@ export async function updateActivity(token, id, activity) {
 /**
  * Requests the API to delete the activity with the given ID.
  * A valid token is required.
+ * @param {string} token
+ * @param {number} id
+ * @throws {Error} if token is missing
+ * @throws {Error} if the API response is not ok
  */
 export async function deleteActivity(token, id) {
   if (!token) {
