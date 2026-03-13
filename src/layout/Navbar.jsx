@@ -12,7 +12,10 @@ export default function Navbar() {
         <NavLink to="/routines">Routines</NavLink>
         {/* This remains <a> because it's not a real link! */}
         {token ? (
-          <a onClick={() => logout()}>Log out</a>
+          <>
+            <NavLink to="/dashboard">Dashboard</NavLink>
+            <a onClick={() => logout()}>Log out</a>
+          </>
         ) : (
           <>
             <NavLink to="/register">Register</NavLink>

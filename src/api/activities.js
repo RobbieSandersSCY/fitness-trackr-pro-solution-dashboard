@@ -48,6 +48,26 @@ export async function createActivity(token, activity) {
   }
 }
 
+export async function updateActivity(token, id, activity) {
+  if (!token) {
+    throw Error("You must be signed in to update an activity.");
+  }
+
+  const response = await fetch(API + "/activities/" + id, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify(activity),
+  });
+
+  if (!response.ok) {
+    const result = await response.json();
+    throw Error(result.message);
+  }
+}
+
 /**
  * Requests the API to delete the activity with the given ID.
  * A valid token is required.

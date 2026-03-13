@@ -20,6 +20,34 @@ export async function createSet(token, set) {
   }
 }
 
+export async function updateSet(
+  token,
+  routineId,
+  activityId,
+  updates,
+) {
+  if (!token) {
+    throw Error("You must be signed in to update a set.");
+  }
+
+  const response = await fetch(
+    API + "/routines/" + routineId + "/activities/" + activityId,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(updates),
+    },
+  );
+
+  if (!response.ok) {
+    const result = await response.json();
+    throw Error(result.message);
+  }
+}
+
 /**
  * Requests the API to delete the set with the given ID.
  * A valid token is required.

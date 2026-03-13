@@ -44,6 +44,26 @@ export async function createRoutine(token, routine) {
   }
 }
 
+export async function updateRoutine(token, id, routine) {
+  if (!token) {
+    throw Error("You must be signed in to update a routine.");
+  }
+
+  const response = await fetch(API + "/routines/" + id, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify(routine),
+  });
+
+  if (!response.ok) {
+    const result = await response.json();
+    throw Error(result.message);
+  }
+}
+
 /**
  * Requests the API to delete the routine with the given ID.
  * A valid token is required.
